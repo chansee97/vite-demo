@@ -6,6 +6,7 @@ import HelloWorld from './components/HelloWorld.vue';
 
 <template>
 	<HelloWorld />
+	<h1>2023-02-04 21:15:17</h1>
 </template>
 
 <style scoped>
