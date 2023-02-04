@@ -1,17 +1,25 @@
 name: Build and Deploy
+
+# 触发 workflow 的事件，当有新push或者pr时执行
 on:
   push:
     branches:
-      - master # 这里只配置了master分支，所以只有推送master分支才会触发以下任务
+      - master
+  pull_request:
+    branches:
+      - master
+
+# 一个workflow由执行的一项或多项job
 jobs:
   build-and-deploy: # 自定义名称
-    concurrency: ci-${{ github.ref }}
-    runs-on: ubuntu-latest # 运行在虚拟机环境ubuntu-latest
+    # 运行在虚拟机环境ubuntu-latest
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout  ️ # 将代码拉取到虚拟机
         uses: actions/checkout@v3
 
-      - name: Install and Build # 安装依赖、打包，如果提前已打包好无需这一步
+      - name: Install and Build
         run: |
           npm install
           npm run build
@@ -19,5 +27,6 @@ jobs:
       - name: Deploy # 部署
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages # 部署后提交到那个分支
           folder: dist # 这里填打包好的目录名称
